@@ -25,7 +25,7 @@ app.post("/repositories", (request, response) => {
   //  A rota deve receber title, url e techs dentro do corpo da requisição, 
   // sendo a URL o link para o github desse repositório.
   const {title, url, techs} = request.body;
-  const repository = {id: uuid(), title, url, techs};
+  const repository = {id: uuid(), title, url, techs, likes: 0};
 
   repositories.push(repository);
 
@@ -40,6 +40,7 @@ app.put("/repositories/:id", (request, response) => {
   const { title, url, techs } = request.body;
 
   const repositoryIndex = repositories.findIndex(repository => repository.id === id);
+
 
   if (repositoryIndex < 0){
     return response.status(400).json({error:'Repository not found.'})
@@ -82,8 +83,9 @@ app.post("/repositories/:id/like", (request, response) => {
   if (repositoryIndex < 0){
     return response.status(400).json({error:'Repository not found.'})
   }
-  
-  repositories[repositoryIndex].likes++
+
+  repositories[repositoryIndex].likes = repositories[repositoryIndex].likes + 1;
+
   return response.json(repositories[repositoryIndex])
 });
 
